@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator</h1>
+        <label for="filename">File name:</label>
+        <input type="text" id="filename" name="filename">
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" rows="5"></textarea>
+        <div class="buttons">
+            <button id="clearBtn">clear</button>
+            <button id="generateBtn">generate</button>
+        </div>
+    </div>
+    <script src="qrgen.js"></script>
+    <script>
+        const clearBtn = document.getElementById('clearBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        const filenameInput = document.getElementById('filename');
+        const contentInput = document.getElementById('content');
+
+        clearBtn.addEventListener('click', () => {
+            contentInput.value = '';
+        });
+
+        generateBtn.addEventListener('click', () => {
+            const filename = filenameInput.value;
+            const content = contentInput.value;
+
+            qrgen(filename, content);
+        });
+    </script>
+</body>
+</html>

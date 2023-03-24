@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Generator</title>
+    <style>
+        /* Add your CSS here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        input[type=text] {
+            width: 70%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type=button] {
+            width: 30%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor:pointer
+        }
+        input[type=button]:hover {
+          background-color:#45a049
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/kazuhikoarase/qrcode-generator/js/qrcode.js"></script>
+</head>
+<body>
+
+<h1>QR Code Generator</h1>
+
+<label for="filename">파일명:</label><br>
+<input type="text" id="filename" name="filename"><br>
+
+<label for="content">내용:</label><br>
+<textarea id="content" name="content" rows="4" cols="50"></textarea><br>
+
+<input type="button" value="삭제" onclick="clearContent()">
+<input type="button" value="생성" onclick="generateQRCode()">
+
+<script src="./qrgen2.js"></script>
+
+<script>
+function clearContent() {
+    document.getElementById("content").value = "";
+}
+
+function generateQRCode() {
+    let filename = document.getElementById("filename").value;
+    let content = document.getElementById("content").value;
+
+    qrgen(filename, content);
+}
+</script>
+
+</body>
+</html>
