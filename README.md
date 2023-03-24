@@ -1,2 +1,2 @@
 # qrgen
-QR Code 생성 페이지
+QR Code 생성 웹페이지
