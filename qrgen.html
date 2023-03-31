@@ -85,14 +85,10 @@
             <input id="txtOffset" type="text" readonly></input>
             <button id="nextBtn">▶</button>
         </div>
-        <div class="buttons">
-            <button id="clearBtn">clear</button>
-        </div>
     </div>
     <script src="qrgen.js"></script>
     <script>
         const loadBtn = document.getElementById('loadBtn');
-        const clearBtn = document.getElementById('clearBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const txtOffset = document.getElementById('txtOffset');
@@ -130,9 +126,6 @@
             reader.readAsText(file);
         });
 
-        clearBtn.addEventListener('click', () => {
-            contentInput.value = '';
-        });
         function setOffset() {
             txtOffset.value = offset + '/' + filesize;
         }
