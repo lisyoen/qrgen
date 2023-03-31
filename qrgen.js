@@ -6,9 +6,14 @@ function createElement(tag, attributes = {}) {
     return element;
   }
   
-  function qrgen(filename, content) {
-    const data = JSON.stringify({ filename, content });
-  
+  /**
+   * 
+   * @param {string} filename 
+   * @param {number} offset 
+   * @param {number} size 
+   * @param {string} content 
+   */
+  function qrgen(data) {
     QRCode.toDataURL(data, { errorCorrectionLevel: 'H', margin: 1, scale: 8 })
       .then((url) => {
         const qrCodeContainer = document.getElementById('qrCodeContainer');

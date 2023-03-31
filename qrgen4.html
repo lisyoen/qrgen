@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>QRGen</title>
+  <style>
+    /* Center content vertically and horizontally */
+    html, body {
+      height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    /* Style input fields and buttons */
+    input[type="text"], textarea, button {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 400px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <h1>QRGen</h1>
+  <form>
+    <label for="filename">File name:</label>
+    <input type="text" id="filename" name="filename">
+    <button type="button" id="loadBtn">Load</button>
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" rows="10"></textarea>
+    <button type="button" id="deleteBtn">Delete</button>
+    <button type="button" id="createBtn">Create</button>
+  </form>
+  <script>
+    // Add event listeners to buttons
+    document.getElementById("loadBtn").addEventListener("click", function() {
+      // Load contents of file
+      const filename = document.getElementById("filename").value;
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", filename);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          document.getElementById("content").value = xhr.responseText;
+        }
+      };
+      xhr.send();
+    });
+
+    document.getElementById("deleteBtn").addEventListener("click", function() {
+      // Empty content input form
+      document.getElementById("content").value = "";
+    });
+
+    document.getElementById("createBtn").addEventListener("click", function() {
+      // Call qrgen function from qrgen.js
+      const filename = document.getElementById("filename").value;
+      const content = document.getElementById("content").value;
+      qrgen(filename, content);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>QRGen</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      label {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      input[type="text"], textarea {
+        font-size: 18px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 20px;
+        width: 90%;
+        max-width: 500px;
+      }
+      .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .button {
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      .button:hover {
+        background-color: #006A7F;
+      }
+      .loading {
+        display: none;
+        font-size: 20px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>QRGen</h1>
+    <form>
+      <label for="filename">File name:</label>
+      <input type="text" id="filename" name="filename" required>
+      <button type="button" id="load-button" class="button">Load</button>
+      <label for="content">Content:</label>
+      <textarea id="content" name="content" rows="10" required></textarea>
+      <div class="button-container">
+        <button type="button" id="delete-button" class="button">Delete</button>
+        <button type="button" id="create-button" class="button">Create</button>
+      </div>
+      <div id="loading" class="loading">Loading...</div>
+    </form>
+    <script src="qrcode.min.js"></script>
+    <script src="QRGen.js"></script>
+  </body>
+</html>

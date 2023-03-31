@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script src="qrcode.min.js"></script>
 
     <title>QR Code Generator</title>
     <style>
@@ -13,6 +14,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 800px;
             margin: 40px auto;
@@ -21,16 +23,21 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             margin-top: 0;
             margin-bottom: 30px;
             text-align: center;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
         }
-        input, textarea, button {
+
+        input,
+        textarea,
+        button {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -39,50 +46,146 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+        input,
+        button {
+            text-align: center;
+        }
+
         button {
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         .buttons {
             display: flex;
             justify-content: space-between;
         }
     </style>
 </head>
+
 <body>
+    <a href="/qrcode.min.js">qrcode</a>
     <div class="container">
         <h1>QR Code Generator</h1>
         <label for="filename">File name:</label>
-        <input type="text" id="filename" name="filename">
+        <input type="file" id="filename" name="filename">
         <label for="content">Content:</label>
-        <textarea id="content" name="content" rows="5"></textarea>
+        <textarea id="contentInput" name="content" rows="5"></textarea>
+        <textarea id="contentOutput" name="content" rows="5"></textarea>
+        <textarea id="contentJSON" name="content" rows="5"></textarea>
+        <div class="buttons">
+            <!-- <button id="loadBtn">load</button> -->
+            <button id="prevBtn">◀</button>
+            <input id="txtOffset" type="text" readonly></input>
+            <button id="nextBtn">▶</button>
+        </div>
         <div class="buttons">
             <button id="clearBtn">clear</button>
-            <button id="generateBtn">generate</button>
         </div>
     </div>
     <script src="qrgen.js"></script>
     <script>
+        const loadBtn = document.getElementById('loadBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const generateBtn = document.getElementById('generateBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const txtOffset = document.getElementById('txtOffset');
         const filenameInput = document.getElementById('filename');
-        const contentInput = document.getElementById('content');
+        const contentInput = document.getElementById('contentInput');
+        const contentOutput = document.getElementById('contentOutput');
+        const contentJSON = document.getElementById('contentJSON');
+
+        let filename = '';
+        const fileInput = document.getElementById('filename');
+        let offset = 0;
+        const defaultcodesize = 1024;
+        let codesize = defaultcodesize;
+        let filesize = 0;
+
+        fileInput.addEventListener('change', (event) => {
+            console.log('changed');
+            const file = event.target.files[0];
+            filesize = file.size;
+            const reader = new FileReader();
+
+            reader.addEventListener('load', (event) => {
+                console.log('load', event);
+                const text = event.target.result;
+                console.log(text);
+                contentInput.value = text;
+                filename = filenameInput.value;
+                const content = contentInput.value;
+                setOffset();
+                contentOutput.value = getData(filename, filesize, offset, codesize, contentInput.value);
+
+                generate();
+            });
+
+            reader.readAsText(file);
+        });
 
         clearBtn.addEventListener('click', () => {
             contentInput.value = '';
         });
+        function setOffset() {
+            txtOffset.value = offset + '/' + filesize;
+        }
 
-        generateBtn.addEventListener('click', () => {
-            const filename = filenameInput.value;
-            const content = contentInput.value;
+        function getData(filename, filesize, offset, codesize, content) {
+            console.log('getData', filename, filesize, offset, codesize, content);
+            const subcontent = content.substr(offset, codesize);
+            return JSON.stringify({ filename, filesize, offset, codesize, subcontent });
+        }
+        
+        function generate() {
+            const data = getData(filename, filesize, offset, codesize, contentInput.value);
+            contentJSON.value = data;
+            console.log('data.size', data.length);
+            qrgen(data);
+        }
 
-            qrgen(filename, content);
+        prevBtn.addEventListener('click', () => {
+            if (offset > defaultcodesize) {
+                codesize = defaultcodesize;
+            } else if (offset < codesize) {
+                codesize = offset;
+            }
+            offset -= codesize;
+            if (offset < 0) {
+                offset = 0;
+            }
+            console.log('offset', offset);
+            console.log('codesize', codesize);
+            setOffset();
+            generate();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const lastoffset = offset;
+            offset += codesize;
+            if (offset >= filesize) {
+                console.log('offset overflow', offset, filesize);
+                offset = lastoffset;
+                return;
+            }
+            if (offset + codesize > filesize) {
+                codesize = filesize - offset;
+                console.log('offset max', offset, filesize);
+                console.log('codesize', codesize);
+            } else {
+                codesize = defaultcodesize;
+                console.log('codesize', codesize);
+            }
+            setOffset();
+            generate();
         });
     </script>
 </body>
+
 </html>
